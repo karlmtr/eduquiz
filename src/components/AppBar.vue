@@ -9,7 +9,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="flex justify-between  p-3">
+  <div class="flex justify-between p-3">
     <div>
       <ArrowLeftIcon
         v-if="arrow"

@@ -13,7 +13,12 @@ import AppBar from "@/components/AppBar.vue";
       <div class="bg-red-900 text-center" @click="router.push('statistics')">
         Statistiques
       </div>
-      <div class="bg-red-900 text-center">Editeur de question</div>
+      <div class="bg-red-900 text-center" @click="router.push('qList')">
+        Voir/éditer les questions
+      </div>
+      <div class="bg-red-900 text-center" @click="router.push('addQuestion')">
+        Ajouter une nouvelle question
+      </div>
     </div>
   </main>
 </template>
