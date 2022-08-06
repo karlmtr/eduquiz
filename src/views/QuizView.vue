@@ -9,7 +9,7 @@ import AppBar from "@/components/AppBar.vue";
     title="Quizzzzzz"
     @pressedArrow="router.replace('/')"
   ></AppBar>
-  <main>
+  <main class="main-container px-0">
     <div class="flex flex-col justify-center gap-3">
       <div class="m-3 bg-slate-300 text-center">C'est le quizzzzzz</div>
     </div>

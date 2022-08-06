@@ -9,15 +9,17 @@ const props = defineProps({
 </script>
 
 <template>
-  <div class="flex justify-between p-3">
-    <div>
-      <ArrowLeftIcon
-        v-if="arrow"
-        class="h-5"
-        @click="$emit('pressedArrow')"
-      ></ArrowLeftIcon>
+  <header class="sticky top-0 z-50 backdrop-blur-xl p-3">
+    <div class="flex justify-between">
+      <div>
+        <ArrowLeftIcon
+          v-if="arrow"
+          class="h-5"
+          @click="$emit('pressedArrow')"
+        ></ArrowLeftIcon>
+      </div>
+      <div>{{ title }}</div>
+      <div><div v-if="profile" id="avatar">Avatar</div></div>
     </div>
-    <div>{{ title }}</div>
-    <div><div v-if="profile" id="avatar">Avatar</div></div>
-  </div>
+  </header>
 </template>

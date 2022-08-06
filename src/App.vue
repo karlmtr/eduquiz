@@ -3,10 +3,11 @@ import { RouterView } from "vue-router";
 </script>
 
 <template>
-  <div class="bg-red-300 min-h-screen">
+  <div
+    class="flex flex-col bg-gradient-to-r from-blue-500 to-blue-600 min-h-screen"
+  >
     <RouterView />
   </div>
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
