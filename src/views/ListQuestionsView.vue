@@ -8,7 +8,6 @@ import { onMounted } from "vue";
 import type { DocumentData } from "@firebase/firestore";
 
 const questions = ref<DocumentData[]>([]);
-const tests = ref<string[]>([]);
 onMounted(async () => {
   const querySnap = await getDocs(query(collection(db, "questions")));
   querySnap.forEach((doc) => {
@@ -28,7 +27,6 @@ onMounted(async () => {
       @pressedArrow="router.go(-1)"
     ></AppBar>
     <main class="overflow-y-auto">
-      <div v-for="test in tests" :key="test">{{ test }}</div>
       <!-- <div @click="fetchQuestions" class="p-10 bg-red-200">Checher quesitons</div> -->
       <div class="flex flex-col gap-3 p-6">
         <div

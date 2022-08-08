@@ -21,8 +21,5 @@ export const quizStateStore = defineStore({
     setStarted() {
       this.started = true;
     },
-    shuffle(a: DocumentData[]) {
-      return a;
-    },
   },
 });

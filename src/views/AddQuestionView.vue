@@ -110,13 +110,13 @@ const resetQuestion = () => {
             </option>
           </select>
         </div>
-        <label class="text-center">Collection</label>
+        <label class="text-center">Collection (optionel)</label>
         <input
           class="rounded-md h-8 px-2"
           v-model="question.collection"
           type="text"
         />
-        <div v-if="!isQuestionValid" class="text-red-600 text-center">
+        <div v-if="!isQuestionValid" class="text-red-400 text-center">
           Il faut remplir tous les champs obligatoires !
         </div>
         <div class="flex justify-center">
