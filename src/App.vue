@@ -6,8 +6,21 @@ import { RouterView } from "vue-router";
   <div
     class="flex flex-col bg-gradient-to-r from-blue-500 to-blue-600 min-h-screen"
   >
-    <RouterView />
+    <RouterView v-slot="{ Component }">
+      <transition name="fade" mode="out-in">
+        <component :is="Component" />
+      </transition>
+    </RouterView>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.1s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

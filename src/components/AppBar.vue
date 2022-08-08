@@ -19,7 +19,7 @@ const props = defineProps({
         ></ArrowLeftIcon>
       </div>
       <div>{{ title }}</div>
-      <div><div v-if="profile" id="avatar">Avatar</div></div>
+      <div><div v-if="profile" class="bg-white rounded-full p-5"></div></div>
     </div>
   </header>
 </template>

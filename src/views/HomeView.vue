@@ -4,22 +4,24 @@ import AppBar from "@/components/AppBar.vue";
 </script>
 
 <template>
-  <AppBar title="Home" :profile="{}"></AppBar>
+  <div>
+    <AppBar title="Home" :profile="{ hello: true }"></AppBar>
 
-  <main class="main-container">
-    <div class="home-button" @click="router.push('newGame')">
-      Nouvelle partie
-    </div>
-    <div class="home-button" @click="router.push('statistics')">
-      Statistiques
-    </div>
-    <div class="home-button" @click="router.push('qList')">
-      Voir/éditer les questions
-    </div>
-    <div class="home-button" @click="router.push('addQuestion')">
-      Ajouter une nouvelle question
-    </div>
-  </main>
+    <main class="main-container">
+      <div class="home-button" @click="router.push({ name: 'newGame' })">
+        Nouvelle partie
+      </div>
+      <div class="home-button" @click="router.push({ name: 'statistics' })">
+        Statistiques
+      </div>
+      <div class="home-button" @click="router.push({ name: 'qList' })">
+        Voir/éditer les questions
+      </div>
+      <div class="home-button" @click="router.push({ name: 'addQuestion' })">
+        Ajouter une nouvelle question
+      </div>
+    </main>
+  </div>
 </template>
 <style scoped>
 .home-button {
