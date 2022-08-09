@@ -5,6 +5,9 @@ export const quizStateStore = defineStore({
   state: () => ({
     questions: [] as DocumentData[],
     started: false,
+    questionAnswered: false,
+    nbGoodAnswers: 0,
+    indexQuestion: 0,
   }),
   getters: {
     getRandomOrderQuestions: (state) => {
