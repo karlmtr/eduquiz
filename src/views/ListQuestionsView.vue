@@ -26,9 +26,9 @@ onMounted(async () => {
       title="Questions"
       @pressedArrow="router.go(-1)"
     ></AppBar>
-    <main class="overflow-y-auto">
+    <main class="main-container overflow-y-auto">
       <!-- <div @click="fetchQuestions" class="p-10 bg-red-200">Checher quesitons</div> -->
-      <div class="flex flex-col gap-3 p-6">
+      <div class="flex flex-col gap-3">
         <div
           v-for="question in questions"
           :key="question.ID"

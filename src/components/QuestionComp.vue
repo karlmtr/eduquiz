@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { quizStateStore } from "@/stores/quizStore";
 import type { DocumentData } from "@firebase/firestore";
-import { ref } from "vue";
+import { ref, watch } from "vue";
 
 const quizStore = quizStateStore();
 
@@ -19,30 +19,46 @@ interface Question {
   ID: string;
 }
 
-const statusMessage = ref("");
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
   question: Question | DocumentData;
 }>();
+const statusMessage = ref("");
+const selectedAnswer = ref<answer>();
 
 const checkAnswer = (a: answer) => {
   quizStore.questionAnswered = true;
-  if ("isCorrect" in a) {
+  selectedAnswer.value = a;
+  if (a.isCorrect) {
+    quizStore.nbGoodAnswers++;
     statusMessage.value = "Bonne réponse !";
   } else {
     statusMessage.value = "C'est pas juste ... ";
   }
 };
 
-const styleAnswered = (answ: answer) => {
+const styleAnswered = (a: answer) => {
   const temp = "border-solid border-4 ";
-  if (answ.isCorrect) {
-    quizStore.nbGoodAnswers++;
+  if (a == selectedAnswer.value && a.isCorrect) {
     return temp + "border-green-400";
-  } else {
+  } else if (a == selectedAnswer.value && !a.isCorrect) {
     return temp + "border-red-400";
+  } else {
+    return "";
   }
 };
+
+const resetQuestionState = () => {
+  selectedAnswer.value = undefined;
+  statusMessage.value = "";
+};
+
+watch(
+  () => props.question.ID,
+  () => {
+    resetQuestionState();
+  }
+);
 </script>
 
 <template>

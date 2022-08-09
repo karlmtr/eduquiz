@@ -8,6 +8,7 @@ export const quizStateStore = defineStore({
     questionAnswered: false,
     nbGoodAnswers: 0,
     indexQuestion: 0,
+    finished: false,
   }),
   getters: {
     getRandomOrderQuestions: (state) => {
