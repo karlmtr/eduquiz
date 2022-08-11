@@ -126,3 +126,4 @@ dist
 .yarn/install-state.gz
 .pnp.*
 src/firebase/init.ts
+src/.DS_Store

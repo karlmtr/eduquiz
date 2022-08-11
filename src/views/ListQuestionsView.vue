@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import router from "../router/index";
 import AppBar from "@/components/AppBar.vue";
 import db from "../firebase/init";
 import { ref } from "vue";
 import { collection, getDocs, query } from "@firebase/firestore";
 import { onMounted } from "vue";
 import type { DocumentData } from "@firebase/firestore";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 
 const questions = ref<DocumentData[]>([]);
 onMounted(async () => {
@@ -17,6 +19,10 @@ onMounted(async () => {
     }
   });
 });
+
+const openQuestion = (ID: string) => {
+  router.push({ name: "edit", params: { ID: ID as string } });
+};
 </script>
 
 <template>
@@ -24,15 +30,15 @@ onMounted(async () => {
     <AppBar
       :arrow="true"
       title="Questions"
-      @pressedArrow="router.go(-1)"
+      @pressedArrow="router.push({ name: 'home' })"
     ></AppBar>
-    <main class="main-container overflow-y-auto">
-      <!-- <div @click="fetchQuestions" class="p-10 bg-red-200">Checher quesitons</div> -->
-      <div class="flex flex-col gap-3">
+    <main class="overflow-y-auto main-container">
+      <div class="flex flex-col gap-3 mb-5">
         <div
           v-for="question in questions"
           :key="question.ID"
-          class="bg-red-100 rounded-xl min-h-[50px] shadow-md px-2 py-1"
+          class="bg-red-100 rounded-xl min-h-[50px] shadow-md px-2 py-1 hover:bg-blue-200 hover:shadow-none cursor-pointer"
+          @click="openQuestion(question.ID)"
         >
           {{ question.question }}
         </div>

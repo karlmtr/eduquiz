@@ -1,6 +1,9 @@
 <script setup lang="ts">
-import router from "../router/index";
+// import router from "../router/index";
 import AppBar from "@/components/AppBar.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 </script>
 
 <template>
@@ -25,6 +28,6 @@ import AppBar from "@/components/AppBar.vue";
 </template>
 <style scoped>
 .home-button {
-  @apply bg-blue-200 text-center rounded-md px-2 py-6 shadow-md my-10 min-w-min hover:bg-blue-300 hover:cursor-pointer;
+  @apply bg-blue-200 text-center rounded-md px-2 py-6 shadow-md my-10 min-w-min hover:bg-blue-300 hover:cursor-pointer active:bg-slate-500;
 }
 </style>

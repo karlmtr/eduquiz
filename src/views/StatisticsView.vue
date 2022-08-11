@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import router from "../router/index";
 import AppBar from "@/components/AppBar.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 </script>
 
 <template>
@@ -8,9 +10,9 @@ import AppBar from "@/components/AppBar.vue";
     <AppBar
       :arrow="true"
       title="Statistiques"
-      @pressedArrow="router.go(-1)"
+      @pressedArrow="router.push({ name: 'home' })"
     ></AppBar>
-    <main>
+    <main class="main-container">
       <div class="flex flex-col justify-center gap-3">
         <div>
           Sera implémenté quand les comptes fonctionneront, vu que c'est lié à

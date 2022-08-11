@@ -39,6 +39,11 @@ const router = createRouter({
       name: "resultsQuiz",
       component: () => import("../views/resultsView.vue"),
     },
+    {
+      path: "/edit/:ID",
+      name: "edit",
+      component: () => import("../views/editView.vue"),
+    },
   ],
 });
 

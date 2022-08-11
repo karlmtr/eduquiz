@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import router from "../router/index";
 import AppBar from "@/components/AppBar.vue";
 import { quizStateStore } from "@/stores/quizStore";
 import { onBeforeMount } from "vue";
+import { useRouter } from "vue-router";
 
 const quizStore = quizStateStore();
+const router = useRouter();
 
 onBeforeMount(async () => {
   if (!quizStore.finished) {

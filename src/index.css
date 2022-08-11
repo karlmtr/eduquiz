@@ -4,6 +4,6 @@
 
 @layer components {
     .main-container {
-        @apply overflow-y-auto flex flex-col px-10 sm:w-1/2 sm:mx-auto sm:max-w-lg;
+        @apply flex flex-col px-10 overflow-y-auto sm:mx-auto sm:max-w-xl;
     }
   }

@@ -1,13 +1,27 @@
 <script setup lang="ts">
 import AppBar from "@/components/AppBar.vue";
-import { ref, reactive, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import db from "../firebase/init";
-import { doc, setDoc, collection } from "firebase/firestore";
+import {
+  doc,
+  updateDoc,
+  getDoc,
+  type DocumentData,
+  deleteDoc,
+} from "firebase/firestore";
 import { Qthemes, Qyears } from "@/helpers/definitions";
 import type { Question } from "../helpers/types";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
+import isEqual from "lodash.isequal";
 import { emitToast } from "@/helpers/functions";
-const question = reactive<Question>({
+
+// const props = defineProps<{
+//   ID: string;
+// }>();
+
+const router = useRouter();
+const route = useRoute();
+const questionTemplate = {
   question: "",
   answerOptions: [
     { answer: "", isCorrect: true },
@@ -19,56 +33,87 @@ const question = reactive<Question>({
   year: "3",
   collection: "",
   ID: "",
-});
-
-const router = useRouter();
+};
+const deleting = ref(false);
+const submitting = ref(false);
 
 const themes = ref(Qthemes);
 const years = ref(Qyears);
+const question = ref<Question | DocumentData>(questionTemplate);
+const snap = ref<Question | DocumentData>();
 
-const submitting = ref(false);
+onMounted(async () => {
+  snap.value = await (
+    await getDoc(doc(db, "questions", route.params.ID as string))
+  ).data();
+  question.value = JSON.parse(
+    JSON.stringify(snap.value as unknown as DocumentData)
+  );
+});
 
 const isQuestionValid = computed(() => {
   if (
-    question.question === "" ||
-    question.answerOptions[0].answer === "" ||
-    question.answerOptions[1].answer === "" ||
-    question.answerOptions[2].answer === "" ||
-    question.answerOptions[3].answer === ""
+    question.value.question === "" ||
+    question.value.answerOptions[0].answer === "" ||
+    question.value.answerOptions[1].answer === "" ||
+    question.value.answerOptions[2].answer === "" ||
+    question.value.answerOptions[3].answer === ""
   ) {
     return false;
   } else {
     return true;
   }
 });
-const sendToFirestore = async () => {
-  if (isQuestionValid.value) {
-    const colRef = doc(collection(db, "questions", question.ID));
-    question.ID = colRef.id;
-    await setDoc(colRef, question);
+
+const sytleButtonSubmit = computed(() => {
+  if (edited.value && isQuestionValid.value) {
+    return "bg-green-300";
+  } else if (edited.value && !isQuestionValid.value) {
+    return "bg-slate-400";
+  } else {
+    return "bg-slate-300";
   }
+});
+
+const edited = computed(() => {
+  return !isEqual(snap.value, question.value);
+});
+
+const sendToFirestore = async () => {
+  updateDoc(doc(db, "questions", question.value.ID), question.value);
 };
+const deleteFromFirestore = async () => {
+  deleteDoc(doc(db, "questions", question.value.ID));
+};
+
+const deleteQuestion = () => {
+  deleting.value = true;
+  deleteFromFirestore()
+    .then(() => {
+      deleting.value = false;
+      emitToast("Effacé avec succès", "success");
+      router.replace({ name: "qList" });
+    })
+    .catch(() => {
+      emitToast(`Erreur, vérifiez votre connexion...`, "danger");
+    });
+};
+
 const processQuestion = () => {
   submitting.value = true;
+
   sendToFirestore()
     .then(() => {
       submitting.value = false;
-      emitToast("Votre question a été ajoutée avec succès !", "success");
-      resetQuestion();
+      emitToast("Succès", "success");
+      snap.value = question.value;
+      snap.value = JSON.parse(
+        JSON.stringify(question.value as unknown as Question)
+      );
     })
-    .catch((): void => {
-      submitting.value = false;
-      emitToast("Erreur, vérifiez votre connexion...", "danger");
+    .catch(() => {
+      emitToast("Erreur", "danger");
     });
-};
-const resetQuestion = () => {
-  question.answerOptions = [
-    { answer: "", isCorrect: true },
-    { answer: "" },
-    { answer: "" },
-    { answer: "" },
-  ];
-  question.question = "";
 };
 </script>
 
@@ -130,12 +175,20 @@ const resetQuestion = () => {
         <div v-if="!isQuestionValid" class="text-center text-red-400">
           Il faut remplir tous les champs obligatoires !
         </div>
-        <div class="flex justify-center">
+        <div class="flex justify-center gap-2 my-5">
           <button
             type="button"
-            class="flex gap-2 px-3 py-2 bg-green-300 rounded-lg"
+            class="flex gap-2 px-3 py-2 bg-red-400 rounded-lg"
+            @click="deleteQuestion"
+          >
+            Supprimer la question
+          </button>
+          <button
+            type="button"
+            class="flex gap-2 px-3 py-2 rounded-lg"
+            :class="sytleButtonSubmit"
             @click="processQuestion"
-            :disabled="!isQuestionValid"
+            :disabled="!edited || !isQuestionValid"
           >
             <svg
               v-show="submitting"
@@ -153,7 +206,7 @@ const resetQuestion = () => {
                 d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
               />
             </svg>
-            Add
+            Sauver les modifications
           </button>
         </div>
       </form>

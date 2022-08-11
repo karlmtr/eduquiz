@@ -9,17 +9,17 @@ const props = defineProps({
 </script>
 
 <template>
-  <header class="sticky top-0 z-50 backdrop-blur-xl p-3">
+  <header class="sticky top-0 z-50 p-3 backdrop-blur-xl">
     <div class="flex justify-between">
-      <div>
-        <ArrowLeftIcon
-          v-if="arrow"
-          class="h-5"
-          @click="$emit('pressedArrow')"
-        ></ArrowLeftIcon>
+      <div
+        class="flex items-center p-2 rounded-full hover:cursor-pointer hover:bg-slate-50"
+        :class="!arrow ? 'invisible' : ''"
+        @click="$emit('pressedArrow')"
+      >
+        <ArrowLeftIcon v-if="arrow" class="w-5 h-5"></ArrowLeftIcon>
       </div>
-      <div>{{ title }}</div>
-      <div><div v-if="profile" class="bg-white rounded-full p-5"></div></div>
+
+      <div><div v-if="profile" class="p-5 bg-white rounded-full"></div></div>
     </div>
   </header>
 </template>
