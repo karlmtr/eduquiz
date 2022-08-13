@@ -1,23 +1,13 @@
 <script setup lang="ts">
 import AppBar from "@/components/AppBar.vue";
 import { quizStateStore } from "@/stores/quizStore";
-import { onBeforeMount } from "vue";
 import { useRouter } from "vue-router";
 
 const quizStore = quizStateStore();
 const router = useRouter();
 
-onBeforeMount(async () => {
-  if (!quizStore.finished) {
-    router.replace({ name: "newGame" });
-  }
-});
-
 const finishQuiz = () => {
   // push user and statistiques pour question
-
-  //
-  quizStore.$reset();
   router.replace({ name: "home" });
 };
 </script>
@@ -31,14 +21,14 @@ const finishQuiz = () => {
     ></AppBar>
     <main class="main-container">
       <div class="flex flex-col">
-        <div class="text-center py-32 text-3xl">Résultat du quiz :</div>
+        <div class="py-32 text-3xl text-center">Résultat du quiz :</div>
       </div>
-      <div class="text-center py-16 text-3xl">
+      <div class="py-16 text-3xl text-center">
         Score: {{ quizStore.nbGoodAnswers }} / {{ quizStore.questions.length }}
       </div>
       <button
         @click="finishQuiz"
-        class="bg-yellow-300 py-3 px-2 rounded-lg mx-auto my-32"
+        class="px-2 py-3 mx-auto my-32 bg-yellow-300 rounded-lg"
       >
         Revenir au menu principal
       </button>

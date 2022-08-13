@@ -34,6 +34,7 @@ const fetchDatabase = async () => {
 
 const createNewQuiz = () => {
   loading.value = true;
+  quizStore.$reset;
   fetchDatabase().then(() => {
     loading.value = false;
     quizStore.setStarted();

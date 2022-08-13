@@ -128,3 +128,4 @@ dist
 src/firebase/init.ts
 src/.DS_Store
 .firebase/hosting.ZGlzdA.cache
+.DS_Store

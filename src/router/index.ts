@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import { quizStateStore } from "@/stores/quizStore";
+import { quizFinished, quizStarted } from "./beforeGuards";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,6 +14,7 @@ const router = createRouter({
     {
       path: "/quiz",
       name: "quiz",
+      beforeEnter: [quizStarted],
       component: () => import("../views/QuizView.vue"),
     },
     {
@@ -37,12 +40,18 @@ const router = createRouter({
     {
       path: "/resultsQuiz",
       name: "resultsQuiz",
+      beforeEnter: [quizFinished],
       component: () => import("../views/resultsView.vue"),
     },
     {
       path: "/edit/:ID",
       name: "edit",
       component: () => import("../views/editView.vue"),
+    },
+    {
+      path: "/signUp",
+      name: "signUp",
+      component: () => import("../views/SignUp.vue"),
     },
   ],
 });

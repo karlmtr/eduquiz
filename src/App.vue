@@ -4,7 +4,7 @@ import { RouterView } from "vue-router";
 
 <template>
   <div
-    class="flex flex-col bg-gradient-to-r from-blue-500 to-blue-600 min-h-screen"
+    class="flex flex-col min-h-screen bg-gradient-to-r from-blue-500 to-blue-600"
   >
     <RouterView v-slot="{ Component }">
       <transition name="fade" mode="out-in">

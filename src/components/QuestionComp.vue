@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { quizStateStore } from "@/stores/quizStore";
 import type { DocumentData } from "@firebase/firestore";
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 
 const quizStore = quizStateStore();
 
@@ -59,20 +59,24 @@ watch(
     resetQuestionState();
   }
 );
+
+const shuffledAnswers = computed(() => {
+  return [...props.question.answerOptions].sort(() => Math.random() - 0.5);
+});
 </script>
 
 <template>
   <div class="grid grid-cols-1 gap-2">
     <div
-      class="text-center col-span-1 row-span-4 h-40 mt-12 text-2xl text-slate-300"
+      class="h-40 col-span-1 row-span-4 mt-12 text-2xl text-center text-slate-300"
     >
       {{ question.question }}
     </div>
-    <div class="flex justify-center items-center text-center text-2xl h-20">
+    <div class="flex items-center justify-center h-20 text-2xl text-center">
       {{ statusMessage }}
     </div>
     <button
-      v-for="answ in question.answerOptions"
+      v-for="answ in shuffledAnswers"
       :key="answ"
       class="answer"
       :disabled="quizStore.questionAnswered"

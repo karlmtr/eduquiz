@@ -1,18 +1,12 @@
 <script setup lang="ts">
 import AppBar from "@/components/AppBar.vue";
 import { quizStateStore } from "@/stores/quizStore";
-import { onBeforeMount, ref } from "vue";
+import { ref } from "vue";
 import QuestionComp from "@/components/QuestionComp.vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
 const quizStore = quizStateStore();
-
-onBeforeMount(async () => {
-  if (!quizStore.started) {
-    router.replace({ name: "newGame" });
-  }
-});
 
 const setNextQuestion = () => {
   quizStore.questionAnswered = false;
@@ -36,7 +30,7 @@ const questions = ref(quizStore.getRandomOrderQuestions);
     ></AppBar>
     <main class="main-container">
       <div class="flex flex-col justify-center gap-3">
-        <div class="m-3 bg-slate-300 text-center">
+        <div class="m-3 text-center bg-slate-300">
           Question {{ quizStore.indexQuestion + 1 }} /
           {{ questions.length }}
         </div>
