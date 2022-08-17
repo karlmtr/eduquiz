@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppBar from "@/components/AppBar.vue";
 import { ref, reactive, computed } from "vue";
-import db from "../firebase/init";
+import { db } from "../firebase/init";
 import { doc, setDoc, collection } from "firebase/firestore";
 import { Qthemes, Qyears } from "@/helpers/definitions";
 import type { Question } from "../helpers/types";

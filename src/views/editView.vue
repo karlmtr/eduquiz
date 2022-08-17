@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppBar from "@/components/AppBar.vue";
 import { ref, computed, onMounted } from "vue";
-import db from "../firebase/init";
+import { db } from "../firebase/init";
 import {
   doc,
   updateDoc,

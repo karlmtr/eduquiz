@@ -3,7 +3,7 @@ import AppBar from "@/components/AppBar.vue";
 import { reactive, ref } from "vue";
 import { QnumberChoice, Qthemes } from "../helpers/definitions";
 import { query, collection, getDocs, limit, where } from "firebase/firestore";
-import db from "@/firebase/init";
+import { db } from "@/firebase/init";
 import { quizStateStore } from "../stores/quizStore";
 import { useRouter } from "vue-router";
 

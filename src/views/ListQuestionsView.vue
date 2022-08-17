@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import AppBar from "@/components/AppBar.vue";
-import db from "../firebase/init";
+import { db } from "../firebase/init";
 import { ref } from "vue";
 import { collection, getDocs, query } from "@firebase/firestore";
 import { onMounted } from "vue";

@@ -1,5 +1,10 @@
 <script setup lang="ts">
-import { ArrowLeftIcon } from "@heroicons/vue/solid";
+import { auth } from "@/firebase/init";
+import { ArrowLeftIcon, DotsVerticalIcon } from "@heroicons/vue/solid";
+import { ref } from "vue";
+
+// const email = ref(auth.currentUser?.email);
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps({
   title: { type: String, required: false, default: "" },
@@ -19,7 +24,11 @@ const props = defineProps({
         <ArrowLeftIcon v-if="arrow" class="w-5 h-5"></ArrowLeftIcon>
       </div>
 
-      <div><div v-if="profile" class="p-5 bg-white rounded-full"></div></div>
+      <div>
+        <div v-if="profile" class="p-5">
+          <DotsVerticalIcon></DotsVerticalIcon>
+        </div>
+      </div>
     </div>
   </header>
 </template>
