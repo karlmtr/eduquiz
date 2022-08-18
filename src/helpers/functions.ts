@@ -17,4 +17,7 @@ const emitToast = (
   });
 };
 
-export { emitToast };
+const isTeacher = (email: string) => {
+  return email.endsWith("@galantay.com") || email.endsWith("@eduge.ch");
+};
+export { emitToast, isTeacher };

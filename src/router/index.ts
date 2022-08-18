@@ -1,4 +1,5 @@
 import { user } from "@/firebase/init";
+import { isTeacher } from "@/helpers/functions";
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import { quizFinished, quizStarted } from "./beforeGuards";
@@ -11,7 +12,7 @@ const router = createRouter({
       name: "home",
       component: HomeView,
       meta: {
-        teacher: true,
+        requiresTeacher: false,
         requiresAuth: true,
       },
     },
@@ -21,7 +22,7 @@ const router = createRouter({
       beforeEnter: [quizStarted],
       component: () => import("../views/QuizView.vue"),
       meta: {
-        teacher: false,
+        requiresTeacher: false,
         requiresAuth: true,
       },
     },
@@ -30,7 +31,7 @@ const router = createRouter({
       name: "newGame",
       component: () => import("../views/NewGameView.vue"),
       meta: {
-        teacher: false,
+        requiresTeacher: false,
         requiresAuth: true,
       },
     },
@@ -39,7 +40,7 @@ const router = createRouter({
       name: "statistics",
       component: () => import("../views/StatisticsView.vue"),
       meta: {
-        teacher: false,
+        requiresTeacher: false,
         requiresAuth: true,
       },
     },
@@ -48,7 +49,7 @@ const router = createRouter({
       name: "qList",
       component: () => import("../views/ListQuestionsView.vue"),
       meta: {
-        teacher: true,
+        requiresTeacher: true,
         requiresAuth: true,
       },
     },
@@ -57,7 +58,7 @@ const router = createRouter({
       name: "addQuestion",
       component: () => import("../views/AddQuestionView.vue"),
       meta: {
-        teacher: true,
+        requiresTeacher: true,
         requiresAuth: true,
       },
     },
@@ -67,7 +68,7 @@ const router = createRouter({
       beforeEnter: [quizFinished],
       component: () => import("../views/resultsView.vue"),
       meta: {
-        teacher: false,
+        requiresTeacher: false,
         requiresAuth: true,
       },
     },
@@ -76,7 +77,7 @@ const router = createRouter({
       name: "edit",
       component: () => import("../views/editView.vue"),
       meta: {
-        teacher: true,
+        requiresTeacher: true,
         requiresAuth: true,
       },
     },
@@ -85,7 +86,7 @@ const router = createRouter({
       name: "signUp",
       component: () => import("../views/SignUp.vue"),
       meta: {
-        teacher: false,
+        requiresTeacher: false,
         requiresAuth: false,
       },
     },
@@ -94,7 +95,7 @@ const router = createRouter({
       name: "finishSignIn",
       component: () => import("../views/finishSignIn.vue"),
       meta: {
-        teacher: false,
+        requiresTeacher: false,
         requiresAuth: false,
       },
     },
@@ -103,11 +104,18 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   const requiresAuth = to.matched.some((record) => record.meta.requiresAuth);
-  const logged = await user();
-  if (requiresAuth && !logged) {
+  const requiresTeacher = to.matched.some(
+    (record) => record.meta.requiresTeacher
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const userInfo: any = await user();
+  if (requiresAuth && !userInfo) {
     return { name: "signUp" };
-  } else if (to.name === "signUp" && logged) {
+  } else if ((to.name === "signUp" || to.name === "finishSignIn") && userInfo) {
     return { name: "home" };
+  } else if (requiresTeacher && !isTeacher(userInfo.email)) {
+    return false;
   } else {
     return true;
   }

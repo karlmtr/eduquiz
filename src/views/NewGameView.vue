@@ -47,11 +47,7 @@ const createNewQuiz = () => {
 
 <template>
   <div>
-    <AppBar
-      :arrow="true"
-      title="Nouvelle partie"
-      @pressedArrow="router.push({ name: 'home' })"
-    ></AppBar>
+    <AppBar :arrow="true" title="" @pressedArrow="router.go(-1)"></AppBar>
     <main class="main-container">
       <div class="flex flex-col justify-center gap-3 my-4">
         <form class="flex flex-col gap-5">
