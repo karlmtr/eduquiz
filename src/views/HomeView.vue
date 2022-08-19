@@ -1,8 +1,11 @@
 <script setup lang="ts">
-// import router from "../router/index";
 import AppBar from "@/components/AppBar.vue";
+import { auth } from "@/firebase/init";
 import { useRouter } from "vue-router";
+import { ref } from "vue";
+import { isTeacher } from "@/helpers/functions";
 const router = useRouter();
+const email = ref(auth.currentUser?.email);
 </script>
 
 <template>
@@ -15,10 +18,18 @@ const router = useRouter();
       <div class="home-button" @click="router.push({ name: 'statistics' })">
         Statistiques
       </div>
-      <div class="home-button" @click="router.push({ name: 'qList' })">
+      <div
+        v-if="isTeacher(email)"
+        class="home-button"
+        @click="router.push({ name: 'qList' })"
+      >
         Voir/éditer les questions
       </div>
-      <div class="home-button" @click="router.push({ name: 'addQuestion' })">
+      <div
+        v-if="isTeacher(email)"
+        class="home-button"
+        @click="router.push({ name: 'addQuestion' })"
+      >
         Ajouter une nouvelle question
       </div>
     </main>

@@ -115,7 +115,7 @@ router.beforeEach(async (to) => {
   } else if ((to.name === "signUp" || to.name === "finishSignIn") && userInfo) {
     return { name: "home" };
   } else if (requiresTeacher && !isTeacher(userInfo.email)) {
-    return false;
+    return { name: "home" };
   } else {
     return true;
   }
