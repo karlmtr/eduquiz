@@ -37,6 +37,6 @@ const email = ref(auth.currentUser?.email);
 </template>
 <style scoped>
 .home-button {
-  @apply bg-blue-200 text-center rounded-md px-2 py-6 shadow-md my-10 min-w-min hover:bg-blue-300 hover:cursor-pointer active:bg-slate-500;
+  @apply bg-blue-200 text-center rounded-md px-2 py-6 shadow-md my-10 min-w-min hover:bg-blue-300 hover:cursor-pointer active:bg-slate-500 text-slate-700;
 }
 </style>

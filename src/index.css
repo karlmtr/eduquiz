@@ -8,4 +8,7 @@
     .main-container {
         @apply flex flex-col px-10 overflow-y-auto sm:mx-auto sm:max-w-xl;
     }
+    .form-label {
+        @apply text-left text-slate-200;
+      }
   }

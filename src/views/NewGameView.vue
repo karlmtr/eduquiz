@@ -72,7 +72,7 @@ const createNewQuiz = () => {
         <button
           type="button"
           :disabled="prefs.theme === '' ? true : false"
-          class="flex justify-center w-2/3 gap-2 px-3 py-4 mx-auto my-10 text-center bg-green-400 rounded-lg shadow-md hover:bg-green-500"
+          class="flex justify-center w-2/3 gap-2 px-3 py-4 mx-auto my-10 text-center bg-green-400 rounded-lg shadow-md hover:bg-green-500 text-slate-700"
           @click="createNewQuiz"
         >
           <svg
@@ -97,3 +97,4 @@ const createNewQuiz = () => {
     </main>
   </div>
 </template>
+

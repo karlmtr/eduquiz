@@ -122,51 +122,51 @@ const processQuestion = () => {
     <AppBar :arrow="true" title="" @pressedArrow="router.go(-1)"></AppBar>
     <main class="main-container">
       <form class="flex flex-col gap-3">
-        <label class="text-center">Question</label>
+        <label class="form-label">Question</label>
         <textarea
           class="px-2 rounded-md"
           rows="5"
           v-model="question.question"
         ></textarea>
-        <label class="text-center"> Réponse juste </label>
+        <label class="form-label"> Réponse juste </label>
         <input
           class="h-8 px-2 rounded-md"
           v-model="question.answerOptions[0].answer"
           type="text"
         />
-        <label class="text-center"> Réponse 2</label>
+        <label class="form-label"> Réponse 2</label>
         <input
           class="h-8 px-2 rounded-md"
           v-model="question.answerOptions[1].answer"
           type="text"
         />
-        <label class="text-center"> Réponse 3 </label>
+        <label class="form-label"> Réponse 3 </label>
         <input
           class="h-8 px-2 rounded-md"
           v-model="question.answerOptions[2].answer"
           type="text"
         />
-        <label class="text-center"> Réponse 4 </label>
+        <label class="form-label"> Réponse 4 </label>
         <input
           class="h-8 px-2 rounded-md"
           v-model="question.answerOptions[3].answer"
           type="text"
         />
         <div class="flex items-center">
-          <label class="w-1/4 text-center">Thème</label>
+          <label class="w-1/4 form-label">Thème</label>
           <select class="w-1/2 h-8 px-2 rounded-md" v-model="question.theme">
             <option v-for="theme in themes" :value="theme" :key="theme">
               {{ theme }}
             </option>
           </select>
-          <label class="w-1/4 text-center"> Année </label>
+          <label class="w-1/4 form-label"> Année </label>
           <select class="w-1/4 h-8 px-2 rounded-md" v-model="question.year">
             <option v-for="year in years" :value="year" :key="year">
               {{ year }}
             </option>
           </select>
         </div>
-        <label class="text-center">Collection (optionel)</label>
+        <label class="form-label">Collection (optionel)</label>
         <input
           class="h-8 px-2 rounded-md"
           v-model="question.collection"
