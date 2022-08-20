@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import {
+  getAdditionalUserInfo,
   getAuth,
   isSignInWithEmailLink,
   signInWithEmailLink,
 } from "firebase/auth";
+import { doc, setDoc } from "@firebase/firestore";
 import { useRouter } from "vue-router";
-import { app } from "@/firebase/init";
+import { app, db } from "@/firebase/init";
 
 const router = useRouter();
 const email = ref<string>("");
@@ -21,34 +23,21 @@ const processInscription = () => {
   if (email.value.length !== 0) {
     const auth = getAuth(app);
     if (isSignInWithEmailLink(auth, window.location.href)) {
-      // Additional state parameters can also be passed via URL.
-      // This can be used to continue the user's intended action before triggering
-      // the sign-in operation.
-      // Get the email if available. This should be available if the user completes
-      // the flow on the same device where they started it.
-
-      // User opened the link on a different device. To prevent session fixation
-      // attacks, ask the user to provide the associated email again. For example:
-
-      // The client SDK will parse the code from the link for you.
       signInWithEmailLink(auth, email.value, window.location.href)
         .then((result) => {
-          console.log(result);
-          console.log("Ça a marché");
-          // Clear email from storage.
           window.localStorage.removeItem("emailForSignIn");
-          router.push({ name: "home" });
-          // You can access the new user via result.user
-          // Additional user info profile not available via:
-          // result.additionalUserInfo.profile == null
-          // You can check if the user is new or existing:
-          // result.additionalUserInfo.isNewUser
+
+          if (getAdditionalUserInfo(result)?.isNewUser) {
+            console.log("New User");
+            const colRef = doc(db, "users", result.user.uid);
+            setDoc(colRef, { email: result.user.email }).then(() => {
+              router.push({ name: "home" });
+            });
+          }
         })
         .catch((error) => {
           console.log("Ça marche pas, erreur");
           console.log(error);
-          // Some error occurred, you can inspect the code: error.code
-          // Common errors could be invalid email and invalid or expired OTPs.
         });
     }
   } else {

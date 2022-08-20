@@ -21,6 +21,10 @@ const disconnectUser = async () => {
       console.log("Erreur:", error);
     });
 };
+
+const getEmail = () => {
+  return auth.currentUser?.email;
+};
 </script>
 
 <template>
@@ -59,6 +63,10 @@ const disconnectUser = async () => {
             class="absolute right-0 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
           >
             <div class="px-1 py-1">
+              <div class="text-xs italic">
+                <span>Connecté: </span
+                ><span class="text-blue-600">{{ getEmail() }}</span>
+              </div>
               <MenuItem v-slot="{ active }">
                 <button
                   :class="[
