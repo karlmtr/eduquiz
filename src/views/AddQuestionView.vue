@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppBar from "@/components/AppBar.vue";
 import { ref, reactive, computed } from "vue";
-import { db } from "../firebase/init";
+import { auth, db } from "../firebase/init";
 import { doc, setDoc, collection } from "firebase/firestore";
 import { Qthemes, Qyears } from "@/helpers/definitions";
 import type { Question } from "../helpers/types";
@@ -19,6 +19,7 @@ const question = reactive<Question>({
   year: "3",
   collection: "",
   ID: "",
+  teacherUID: "",
 });
 
 const router = useRouter();
@@ -45,6 +46,7 @@ const sendToFirestore = async () => {
   if (isQuestionValid.value) {
     const colRef = doc(collection(db, "questions", question.ID));
     question.ID = colRef.id;
+    question.teacherUID = auth.currentUser?.uid;
     await setDoc(colRef, question);
   }
 };

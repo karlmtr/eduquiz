@@ -30,10 +30,9 @@ const processInscription = () => {
           if (getAdditionalUserInfo(result)?.isNewUser) {
             console.log("New User");
             const colRef = doc(db, "users", result.user.uid);
-            setDoc(colRef, { email: result.user.email }).then(() => {
-              router.push({ name: "home" });
-            });
+            setDoc(colRef, { email: result.user.email });
           }
+          router.push({ name: "home" });
         })
         .catch((error) => {
           console.log("Ça marche pas, erreur");
