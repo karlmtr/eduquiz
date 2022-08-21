@@ -1,38 +1,55 @@
 <script setup lang="ts">
-import AppBar from "@/components/AppBar.vue";
 import { auth } from "@/firebase/init";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 import { isTeacher } from "@/helpers/functions";
+import { VBtn, VContainer, VDivider } from "vuetify/components";
+
 const router = useRouter();
 const email = ref(auth.currentUser?.email);
 </script>
 
 <template>
   <div>
-    <AppBar title="Home" :profile-menu="true"></AppBar>
-    <main class="main-container">
-      <div class="home-button" @click="router.push({ name: 'newGame' })">
+    <v-container class="d-flex flex-column">
+      <v-btn
+        class="mb-8"
+        color="blue lighten-6"
+        height="75"
+        @click="router.push({ name: 'newGame' })"
+      >
         Nouvelle partie
-      </div>
-      <div class="home-button" @click="router.push({ name: 'statistics' })">
+      </v-btn>
+      <v-btn
+        class="mb-8"
+        color="blue lighten-4"
+        height="75"
+        @click="router.push({ name: 'statistics' })"
+      >
         Statistiques
-      </div>
-      <div
+      </v-btn>
+      <v-divider inset></v-divider>
+
+      <v-btn
+        class="mb-8"
         v-if="isTeacher(email)"
-        class="home-button"
+        color="blue lighten-4"
+        height="75"
         @click="router.push({ name: 'qList' })"
       >
         Voir/éditer les questions
-      </div>
-      <div
+      </v-btn>
+      <v-btn
+        class="mb-8"
         v-if="isTeacher(email)"
-        class="home-button"
+        color="blue lighten-4"
+        height="75"
         @click="router.push({ name: 'addQuestion' })"
       >
-        Ajouter une nouvelle question
-      </div>
-    </main>
+        Nouvelle question
+      </v-btn>
+    </v-container>
+    <!-- </main> -->
   </div>
 </template>
 <style scoped>

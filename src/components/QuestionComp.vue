@@ -66,13 +66,15 @@ const shuffledAnswers = computed(() => {
 </script>
 
 <template>
-  <div class="grid grid-cols-1 gap-2">
+  <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
     <div
-      class="h-40 col-span-1 row-span-4 mt-12 text-2xl text-center text-slate-300"
+      class="h-32 col-span-1 row-span-4 mt-6 text-2xl text-center sm:col-span-2 sm:gap-4 text-slate-300"
     >
       {{ question.question }}
     </div>
-    <div class="flex items-center justify-center h-20 text-2xl text-center">
+    <div
+      class="flex items-center justify-center h-20 text-2xl text-center sm:col-span-2"
+    >
       {{ statusMessage }}
     </div>
     <button

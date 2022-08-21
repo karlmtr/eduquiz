@@ -6,12 +6,28 @@ import { collection, getDocs, query } from "@firebase/firestore";
 import { onMounted } from "vue";
 import type { DocumentData } from "@firebase/firestore";
 import { useRouter } from "vue-router";
+import {
+  VContainer,
+  VCard,
+  VCol,
+  VRow,
+  VCardTitle,
+  VCardActions,
+  VCardSubtitle,
+  VCardText,
+  VDialog,
+  VSheet,
+  VProgressCircular,
+} from "vuetify/components";
 
 const router = useRouter();
 
 const questions = ref<DocumentData[]>([]);
+const loading = ref(false);
 onMounted(async () => {
+  loading.value = true;
   const querySnap = await getDocs(query(collection(db, "questions")));
+  loading.value = false;
   querySnap.forEach((doc) => {
     const data = doc.data();
     if (data) {
@@ -27,22 +43,33 @@ const openQuestion = (ID: string) => {
 
 <template>
   <div>
-    <AppBar
-      :arrow="true"
-      title="Questions"
-      @pressedArrow="router.push({ name: 'home' })"
-    ></AppBar>
-    <main class="overflow-y-auto main-container">
-      <div class="flex flex-col gap-3 mb-5">
-        <div
+    <v-container class="d-flex flex-column">
+      <v-row>
+        <v-col
+          cols="12"
+          dense
+          md="6"
+          lg="4"
           v-for="question in questions"
           :key="question.ID"
-          class="bg-red-100 rounded-xl min-h-[50px] shadow-md px-2 py-1 hover:bg-blue-200 hover:shadow-none cursor-pointer"
-          @click="openQuestion(question.ID)"
         >
-          {{ question.question }}
-        </div>
-      </div>
-    </main>
+          <v-card @click="openQuestion(question.ID)">
+            <v-card-text>
+              <div>{{ question.question }}</div>
+              <div class="text-caption font-italic">{{ question.theme }}</div>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+
+      <v-dialog v-model="loading" hide-overlay persistent>
+        <v-progress-circular
+          indeterminate
+          color="primary"
+          :size="100"
+          :width="10"
+        ></v-progress-circular>
+      </v-dialog>
+    </v-container>
   </div>
 </template>

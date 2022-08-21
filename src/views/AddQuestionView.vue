@@ -162,5 +162,3 @@ const resetQuestion = () => {
     </main>
   </div>
 </template>
-
-
