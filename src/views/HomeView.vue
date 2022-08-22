@@ -1,11 +1,17 @@
 <script setup lang="ts">
-import { auth } from "@/firebase/init";
+import { app } from "@/firebase/init";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 import { isTeacher } from "@/helpers/functions";
 import { VBtn, VContainer, VDivider } from "vuetify/components";
+import { getAuth } from "@firebase/auth";
+import { generalStateStore } from "@/stores/generalStateStore";
 
 const router = useRouter();
+const auth = getAuth(app);
+const generalStore = generalStateStore();
+generalStore.appBar.profileMenu = true;
+generalStore.appBar.goingBack = false;
 const email = ref(auth.currentUser?.email);
 </script>
 
@@ -14,7 +20,7 @@ const email = ref(auth.currentUser?.email);
     <v-container class="d-flex flex-column">
       <v-btn
         class="mb-8"
-        color="blue lighten-6"
+        color="info"
         height="75"
         @click="router.push({ name: 'newGame' })"
       >
@@ -22,7 +28,7 @@ const email = ref(auth.currentUser?.email);
       </v-btn>
       <v-btn
         class="mb-8"
-        color="blue lighten-4"
+        color="info"
         height="75"
         @click="router.push({ name: 'statistics' })"
       >
@@ -33,7 +39,7 @@ const email = ref(auth.currentUser?.email);
       <v-btn
         class="mb-8"
         v-if="isTeacher(email)"
-        color="blue lighten-4"
+        color="info"
         height="75"
         @click="router.push({ name: 'qList' })"
       >
@@ -42,7 +48,7 @@ const email = ref(auth.currentUser?.email);
       <v-btn
         class="mb-8"
         v-if="isTeacher(email)"
-        color="blue lighten-4"
+        color="info"
         height="75"
         @click="router.push({ name: 'addQuestion' })"
       >
@@ -52,8 +58,3 @@ const email = ref(auth.currentUser?.email);
     <!-- </main> -->
   </div>
 </template>
-<style scoped>
-.home-button {
-  @apply bg-blue-200 text-center rounded-md px-2 py-6 shadow-md my-10 min-w-min hover:bg-blue-300 hover:cursor-pointer active:bg-slate-500 text-slate-700;
-}
-</style>

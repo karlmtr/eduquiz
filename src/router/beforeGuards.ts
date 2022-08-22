@@ -20,24 +20,24 @@ async function quizStarted() {
   }
 }
 
-async function loggedAsTeacher() {
-  const auth = getAuth(app);
-  const user = auth.currentUser;
-  if (user) {
-    const email = user?.email;
-    console.log(email);
-    const sampleRegEx = /@galantay.com$/;
+// async function loggedAsTeacher() {
+//   const auth = getAuth(app);
+//   const user = auth.currentUser;
+//   if (user) {
+//     const email = user?.email;
+//     console.log(email);
+//     const sampleRegEx = /@galantay.com$/;
 
-    if (sampleRegEx.test(email as string)) {
-      //logged as teacher
-      return true;
-    } else {
-      return { name: "home" };
-    }
-  } else {
-    return { name: "signUp" };
-  }
-}
+//     if (sampleRegEx.test(email as string)) {
+//       //logged as teacher
+//       return true;
+//     } else {
+//       return { name: "home" };
+//     }
+//   } else {
+//     return { name: "signUp" };
+//   }
+// }
 
 async function logged() {
   const auth = getAuth(app);
@@ -49,4 +49,4 @@ async function logged() {
   }
 }
 
-export { quizFinished, quizStarted, loggedAsTeacher, logged };
+export { quizFinished, quizStarted, logged };

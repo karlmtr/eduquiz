@@ -1,24 +1,16 @@
 <script setup lang="ts">
-import AppBar from "@/components/AppBar.vue";
-import { useRouter } from "vue-router";
+import { generalStateStore } from "@/stores/generalStateStore";
+import { VContainer, VRow } from "vuetify/components";
 
-const router = useRouter();
+const generalStore = generalStateStore();
+generalStore.appBar.profileMenu = false;
+generalStore.appBar.goingBack = true;
 </script>
 
 <template>
-  <div>
-    <AppBar
-      :arrow="true"
-      title="Statistiques"
-      @pressedArrow="router.push({ name: 'home' })"
-    ></AppBar>
-    <main class="main-container">
-      <div class="flex flex-col justify-center gap-3">
-        <div>
-          Sera implémenté quand les comptes fonctionneront, vu que c'est lié à
-          l'utilisateur
-        </div>
-      </div>
-    </main>
-  </div>
+  <v-container>
+    <v-row class="text-center d-flex align-center">
+      <div class="mx-auto text-center my-15 text-h4">Coming soon™️</div>
+    </v-row>
+  </v-container>
 </template>

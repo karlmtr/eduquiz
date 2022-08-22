@@ -1,9 +1,8 @@
+import type { Answer } from "@/types/Answer";
 interface Question {
   question: string;
-  answerOptions: { answer: string; isCorrect?: boolean }[];
+  answerOptions: Answer[];
   theme: string;
-  year: "Préparatoire" | "1" | "2" | "3";
-  collection: string;
   ID: string;
   teacherUID: string | undefined;
 }

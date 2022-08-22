@@ -1,29 +1,49 @@
 <script setup lang="ts">
-import AppBar from "@/components/AppBar.vue";
-import { reactive, ref } from "vue";
-import { QnumberChoice, Qthemes } from "../helpers/definitions";
-import { query, collection, getDocs, limit, where } from "firebase/firestore";
-import { db } from "@/firebase/init";
+import { onMounted, reactive, ref } from "vue";
+import { query, getDocs, limit, where, doc, getDoc } from "firebase/firestore";
+import { generalCol, questionsCol } from "@/firebase/init";
 import { quizStateStore } from "../stores/quizStore";
 import { useRouter } from "vue-router";
-
+import {
+  VRow,
+  VCol,
+  VSelect,
+  VContainer,
+  VBtn,
+  VAutocomplete,
+  VSnackbar,
+} from "vuetify/components";
+import { generalStateStore } from "@/stores/generalStateStore";
 const router = useRouter();
 const quizStore = quizStateStore();
+const generalStore = generalStateStore();
+generalStore.appBar.profileMenu = false;
+generalStore.appBar.goingBack = true;
+
 const prefs = reactive({
   number_questions: 4,
   theme: "",
 });
 
 const loading = ref(false);
+const themes = ref<string[] | undefined>([]);
+const rules = ref([(v: string) => !!v || "Obligatoire"]);
+const snackbar = ref(false);
+
+onMounted(() => {
+  getDoc(doc(generalCol, "question")).then((result) => {
+    themes.value = result.data()?.themes;
+  });
+});
 
 const fetchDatabase = async () => {
   const q = query(
-    collection(db, "questions"),
+    questionsCol,
     where("theme", "==", prefs.theme),
     limit(prefs.number_questions)
   );
   const querySnapshot = await getDocs(q);
-  quizStore.$reset();
+  quizStore.$reset(); // if not already reset
   querySnapshot.forEach((doc) => {
     const data = doc.data();
     if (data) {
@@ -37,6 +57,10 @@ const createNewQuiz = () => {
   quizStore.$reset;
   fetchDatabase().then(() => {
     loading.value = false;
+    if (quizStore.questions.length == 0) {
+      snackbar.value = true;
+      return;
+    }
     quizStore.setStarted();
     router.push({
       name: "quiz",
@@ -47,53 +71,51 @@ const createNewQuiz = () => {
 
 <template>
   <div>
-    <AppBar :arrow="true" title="" @pressedArrow="router.go(-1)"></AppBar>
-    <main class="main-container">
-      <div class="flex flex-col justify-center gap-3 my-4">
-        <form class="flex flex-col gap-5">
-          <div class="flex">
-            <label class="w-1/2"> Nbre questions</label>
-            <select
-              class="h-8 px-2 rounded-md"
-              v-model="prefs.number_questions"
-            >
-              <option v-for="num in QnumberChoice" :key="num" :value="num">
-                {{ num }}
-              </option>
-            </select>
-          </div>
-          <div class="flex">
-            <label class="w-1/2"> Thème </label>
-            <select class="w-1/2 h-8 px-2 rounded-md" v-model="prefs.theme">
-              <option v-for="theme in Qthemes" :key="theme">{{ theme }}</option>
-            </select>
-          </div>
-        </form>
-        <button
-          type="button"
-          :disabled="prefs.theme === '' ? true : false"
-          class="flex justify-center w-2/3 gap-2 px-3 py-4 mx-auto my-10 text-center bg-green-400 rounded-lg shadow-md hover:bg-green-500 text-slate-700"
-          @click="createNewQuiz"
-        >
-          <svg
-            v-show="loading"
-            xmlns="http://www.w3.org/2000/svg"
-            class="w-6 h-6"
-            :class="loading ? 'animate-spin' : ''"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-select
+            v-model="prefs.number_questions"
+            variant="outlined"
+            hide-details
+            label="Nombre de questions"
+            :items="[4]"
+          ></v-select
+        ></v-col>
+      </v-row>
+      <v-row>
+        <v-col>
+          <v-autocomplete
+            :rules="rules"
+            v-model="prefs.theme"
+            variant="outlined"
+            hide-details
+            label="Thème"
+            :items="themes"
+          ></v-autocomplete
+        ></v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" class="d-flex">
+          <v-btn
+            class="mx-auto my-3"
+            color="success"
+            :loading="loading"
+            :disabled="prefs.theme === ''"
+            @click="createNewQuiz"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-            />
-          </svg>
-          Commencer le quiz
-        </button>
-      </div>
-    </main>
+            Commencer !
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-snackbar
+        v-model="snackbar"
+        :timeout="2000"
+        color="error"
+        location="top"
+      >
+        Aucune question trouvée à partir de vos choix
+      </v-snackbar>
+    </v-container>
   </div>
 </template>

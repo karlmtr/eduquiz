@@ -1,14 +1,1 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer components {
-    .main-container {
-        @apply flex flex-col px-10 overflow-y-auto sm:mx-auto sm:max-w-5xl;
-    }
-    .form-label {
-        @apply text-left text-slate-200;
-      }
-  } */
+@import url('https://fonts.googleapis.com/css2?family=Courgette&display=swap');

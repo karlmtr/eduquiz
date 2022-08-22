@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
-import type { DocumentData } from "firebase/firestore";
+import type { Question } from "@/types/Question";
 export const quizStateStore = defineStore({
   id: "quiz",
   state: () => ({
-    questions: [] as DocumentData[],
+    questions: [] as Question[],
     started: false,
     questionAnswered: false,
     nbGoodAnswers: 0,
@@ -19,7 +19,7 @@ export const quizStateStore = defineStore({
     },
   },
   actions: {
-    addQuestion(question: DocumentData) {
+    addQuestion(question: Question) {
       this.questions.push(question);
     },
     setStarted() {

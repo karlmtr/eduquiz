@@ -1,32 +1,21 @@
 <script setup lang="ts">
 import { quizStateStore } from "@/stores/quizStore";
-import type { DocumentData } from "@firebase/firestore";
 import { ref, watch, computed } from "vue";
+import { VRow, VCol, VCard } from "vuetify/components";
+import type { Question } from "@/types/Question";
+import type { Answer } from "@/types/Answer";
 
 const quizStore = quizStateStore();
 
-interface answer {
-  answer: string;
-  isCorrect?: boolean;
-}
-
-interface Question {
-  question: string;
-  answerOptions: answer[];
-  theme: string;
-  year: "Préparatoire" | "1" | "2" | "3";
-  collection: string;
-  ID: string;
-}
-
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const props = defineProps<{
-  question: Question | DocumentData;
+  question: Question;
 }>();
-const statusMessage = ref("");
-const selectedAnswer = ref<answer>();
 
-const checkAnswer = (a: answer) => {
+const statusMessage = ref("");
+const selectedAnswer = ref<Answer>();
+
+const checkAnswer = (a: Answer) => {
   quizStore.questionAnswered = true;
   selectedAnswer.value = a;
   if (a.isCorrect) {
@@ -37,14 +26,11 @@ const checkAnswer = (a: answer) => {
   }
 };
 
-const styleAnswered = (a: answer) => {
-  const temp = "border-solid border-4 ";
+const styleAnswer = (a: Answer) => {
   if (a == selectedAnswer.value && a.isCorrect) {
-    return temp + "border-green-400";
+    return "success";
   } else if (a == selectedAnswer.value && !a.isCorrect) {
-    return temp + "border-red-400";
-  } else {
-    return "";
+    return "error";
   }
 };
 
@@ -66,7 +52,40 @@ const shuffledAnswers = computed(() => {
 </script>
 
 <template>
-  <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+  <v-row>
+    <v-col cols="12" class="justify-center d-flex">
+      <div class="my-10 text-center text-h6">
+        {{ question.question }}
+      </div></v-col
+    >
+  </v-row>
+  <v-row align="end">
+    <v-col cols="12" class="justify-end d-flex">
+      <slot></slot>
+    </v-col>
+  </v-row>
+  <v-row>
+    <v-col
+      v-for="answ in shuffledAnswers"
+      :key="answ.answer"
+      class="justify-center d-flex"
+      cols="12"
+      sm="6"
+    >
+      <v-card
+        height="70"
+        @click="checkAnswer(answ)"
+        :color="selectedAnswer ? styleAnswer(answ) : 'light-blue lighten-4'"
+        class="mx-auto text-center d-flex align-center w-100"
+        :disabled="quizStore.questionAnswered"
+      >
+        <div class="text-center w-100">
+          {{ answ.answer }}
+        </div>
+      </v-card>
+    </v-col>
+  </v-row>
+  <!-- <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
     <div
       class="h-32 col-span-1 row-span-4 mt-6 text-2xl text-center sm:col-span-2 sm:gap-4 text-slate-300"
     >
@@ -87,10 +106,6 @@ const shuffledAnswers = computed(() => {
     >
       {{ answ.answer }}
     </button>
-  </div>
+  </div> -->
 </template>
-<style scoped>
-.answer {
-  @apply text-center p-5 bg-slate-300 rounded-2xl shadow-md hover:bg-slate-400 hover:shadow-none;
-}
-</style>
+<style scoped></style>

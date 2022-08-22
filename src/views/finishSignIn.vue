@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import {
   getAdditionalUserInfo,
   getAuth,
@@ -9,9 +9,24 @@ import {
 import { doc, setDoc } from "@firebase/firestore";
 import { useRouter } from "vue-router";
 import { app, db } from "@/firebase/init";
+import {
+  VContainer,
+  VRow,
+  VCol,
+  VTextField,
+  VForm,
+  VBtn,
+} from "vuetify/components";
+import { generalStateStore } from "@/stores/generalStateStore";
 
 const router = useRouter();
+const generalStore = generalStateStore();
+generalStore.appBar.profileMenu = false;
+generalStore.appBar.goingBack = true;
+
 const email = ref<string>("");
+const validForm = ref(false);
+const processing = ref(false);
 
 onMounted(() => {
   const emailCache = window.localStorage.getItem("emailForSignIn");
@@ -20,6 +35,7 @@ onMounted(() => {
   }
 });
 const processInscription = () => {
+  processing.value = true;
   if (email.value.length !== 0) {
     const auth = getAuth(app);
     if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -32,6 +48,7 @@ const processInscription = () => {
             const colRef = doc(db, "users", result.user.uid);
             setDoc(colRef, { email: result.user.email });
           }
+          processing.value = false;
           router.push({ name: "home" });
         })
         .catch((error) => {
@@ -44,36 +61,52 @@ const processInscription = () => {
   }
 };
 
-const invalidEmail = computed(() => {
-  const sampleRegEx = /^\S+@(edu\.ge|eduge|gmail|galantay)\.(ch|com)$/;
-  return !sampleRegEx.test(email.value);
-});
+const emailRules = ref([
+  (v: string) => !!v || "L'email est obligatoire",
+  (v: string) => {
+    const sampleRegex = /^\S+@(edu\.ge|eduge|galantay)\.(ch|com)$/;
+    return (v && sampleRegex.test(v)) || "Veuillez entrer une adresse valide";
+  },
+]);
 </script>
 
 <template>
   <div>
-    <main class="justify-center h-screen align-middle main-container">
-      <div>Remettre son adresse mail</div>
-      <div class="flex gap-2">
-        <input
-          required
-          pattern="/^\S+@(edu\.ge|eduge)\.ch$/"
-          class="w-2/3 px-2 py-3 mx-auto my-2 rounded-md bg-slate-200 active:bg-slate-300"
-          v-model="email"
-          placeholder="<prof>@eduge.ch ou <eleve>@edu.ge.ch"
-        />
-
-        <button
-          type="button"
-          class="w-1/3 px-2 py-3 mx-auto my-2 text-center bg-green-400 rounded-md active:bg-green-500"
-          @click="processInscription"
-          :disabled="invalidEmail"
-          :class="invalidEmail ? 'bg-slate-500 active:' : ''"
+    <v-container class="justify-center h-screen align-middle main-container">
+      <v-row>
+        <v-col cols="12" class="text-center">
+          Veuillez confirmer votre email</v-col
         >
-          Se connecter
-        </button>
-      </div>
-    </main>
+      </v-row>
+      <v-row class="flex gap-2">
+        <v-col>
+          <v-form
+            ref="form"
+            v-model="validForm"
+            class="d-flex flex-column"
+            @submit="processInscription"
+            @keydown.enter.prevent="processInscription"
+          >
+            <v-text-field
+              v-model="email"
+              required
+              label="Email scolaire (@edu...)"
+              variant="outlined"
+              :rules="emailRules"
+            ></v-text-field>
+            <v-btn
+              color="success"
+              @click="processInscription"
+              :disabled="!validForm"
+              :loading="processing"
+              class="mx-auto"
+            >
+              Confirmer
+            </v-btn>
+          </v-form>
+        </v-col>
+      </v-row>
+    </v-container>
   </div>
 </template>
 

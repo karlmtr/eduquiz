@@ -11,7 +11,11 @@ import {
   VCol,
   VSnackbar,
 } from "vuetify/components";
+import { generalStateStore } from "@/stores/generalStateStore";
 
+const generalStore = generalStateStore();
+generalStore.appBar.profileMenu = false;
+generalStore.appBar.goingBack = false;
 const email = ref("");
 const sending = ref(false);
 const emailSent = ref(false);
@@ -22,9 +26,13 @@ const processInscription = () => {
     // On continue l'authentification
     sending.value = true;
     const actionCodeSettings = {
-      url: "http://localhost:3333/finishSignIn",
+      url: "https://eduquiz-600f8.firebaseapp.com/finishSignIn",
       handleCodeInApp: true,
     };
+    // const actionCodeSettings = {
+    //   url: "http://localhost:3333/finishSignIn",
+    //   handleCodeInApp: true,
+    // };
     const auth = getAuth(app);
     sendSignInLinkToEmail(auth, email.value, actionCodeSettings)
       .then(() => {
@@ -42,9 +50,9 @@ const processInscription = () => {
 };
 
 const emailRules = ref([
-  (v: string) => !!v || "L'Email est obligatoire",
+  (v: string) => !!v || "Obligatoire",
   (v: string) => {
-    const sampleRegex = /^\S+@(edu\.ge|eduge|gmail|galantay)\.(ch|com)$/;
+    const sampleRegex = /^\S+@(edu\.ge|eduge|galantay)\.(ch|com)$/;
     return (v && sampleRegex.test(v)) || "Veuillez entrer une adresse valide";
   },
 ]);
@@ -53,17 +61,26 @@ const emailRules = ref([
 <template>
   <div>
     <v-container>
+      <h1 id="logo" color="success" class="text-center w-100">EduQuiz</h1>
       <template v-if="!emailSent">
         <v-row>
           <v-col cols="12">
-            <p class="text-center text-h6 font-weight-bold">
+            <p
+              class="text-center text-subtitle-1 font-weight-light font-italic"
+            >
               S'inscrire/connecter avec son adresse mail scolaire
             </p>
           </v-col>
         </v-row>
         <v-row>
           <v-col>
-            <v-form ref="form" v-model="validForm" class="d-flex flex-column">
+            <v-form
+              ref="form"
+              v-model="validForm"
+              class="d-flex flex-column"
+              @submit="processInscription"
+              @keydown.enter.prevent="processInscription"
+            >
               <v-text-field
                 v-model="email"
                 required
@@ -114,4 +131,24 @@ const emailRules = ref([
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+#logo {
+  font-family: "Courgette";
+  font-size: 18vw;
+  background-image: linear-gradient(
+    to right,
+    rgb(236, 72, 153),
+    rgb(239, 68, 68),
+    rgb(234, 179, 8)
+  );
+  background-size: 100%;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media screen and (min-width: 900px) {
+  #logo {
+    font-size: 150px;
+  }
+}
+</style>

@@ -6,11 +6,19 @@ import router from "./router";
 import "./index.css";
 import "vuetify/styles"; // Global CSS has to be imported
 import { createVuetify } from "vuetify";
-import "./assets/main.css";
-import "@mdi/font/css/materialdesignicons.css";
+// import "@mdi/font/css/materialdesignicons.css";
+import { aliases, mdi } from "vuetify/iconsets/mdi-svg";
 const app = createApp(App);
 
-const vuetify = createVuetify();
+const vuetify = createVuetify({
+  icons: {
+    defaultSet: "mdi",
+    aliases,
+    sets: {
+      mdi,
+    },
+  },
+});
 app.use(createPinia());
 app.use(router);
 app.use(vuetify);

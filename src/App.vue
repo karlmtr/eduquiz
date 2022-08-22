@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { signOut } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
+import { ref } from "vue";
 import { RouterView, useRouter } from "vue-router";
 import {
   VMain,
@@ -11,13 +12,18 @@ import {
   VList,
   VListItem,
   VListItemTitle,
+  VSpacer,
 } from "vuetify/components";
-import { auth } from "./firebase/init";
+import { app } from "./firebase/init";
+import { generalStateStore } from "@/stores/generalStateStore";
+import { mdiArrowLeft, mdiThemeLightDark, mdiDotsVertical } from "@mdi/js";
 
 const getEmail = () => {
+  const auth = getAuth(app);
   return auth.currentUser?.email;
 };
 const disconnectUser = async () => {
+  const auth = getAuth(app);
   signOut(auth)
     .then(() => {
       router.push({ name: "signUp" });
@@ -27,24 +33,29 @@ const disconnectUser = async () => {
     });
 };
 const router = useRouter();
+const darkTheme = ref(false);
+const generalStore = generalStateStore();
 </script>
 
 <template>
-  <v-app theme="light">
+  <v-app :theme="darkTheme ? 'dark' : 'light'">
     <v-app-bar app density="compact">
-      <template v-slot:prepend>
-        <v-btn icon="mdi-arrow-left" @click="router.go(-1)"> </v-btn>
+      <template v-if="generalStore.appBar.goingBack" v-slot:prepend>
+        <v-btn :icon="mdiArrowLeft" @click="router.go(-1)"> </v-btn>
       </template>
-      <template v-slot:append>
-        <v-menu activator="parent">
+      <v-spacer></v-spacer>
+      <v-btn :icon="mdiThemeLightDark" @click="darkTheme = !darkTheme"> </v-btn>
+
+      <template v-if="generalStore.appBar.profileMenu" v-slot:append>
+        <v-menu>
           <template v-slot:activator="{ props }">
-            <v-btn icon="mdi-dots-vertical" v-bind="props"></v-btn>
+            <v-btn :icon="mdiDotsVertical" v-bind="props"></v-btn>
           </template>
           <v-list>
             <v-list-item>
               <v-list-item-title>
                 Connecté :
-                <span class="font-italic">{{ getEmail() }}</span>
+                <span class="font-italic text-blue">{{ getEmail() }}</span>
               </v-list-item-title>
             </v-list-item>
             <v-list-item @click="disconnectUser">
