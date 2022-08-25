@@ -26,7 +26,7 @@ const processInscription = () => {
     // On continue l'authentification
     sending.value = true;
     const actionCodeSettings = {
-      url: "https://eduquiz-600f8.firebaseapp.com/finishSignIn",
+      url: `${window.location.origin}/finishSignIn`,
       handleCodeInApp: true,
     };
     // const actionCodeSettings = {

@@ -35,6 +35,7 @@ const disconnectUser = async () => {
 const router = useRouter();
 const darkTheme = ref(false);
 const generalStore = generalStateStore();
+
 </script>
 
 <template>
