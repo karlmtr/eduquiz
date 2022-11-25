@@ -21,7 +21,7 @@ generalStore.appBar.profileMenu = false;
 generalStore.appBar.goingBack = true;
 
 const prefs = reactive({
-  number_questions: 4,
+  number_questions: 10,
   theme: "",
 });
 
@@ -75,11 +75,11 @@ const createNewQuiz = () => {
       <v-row>
         <v-col>
           <v-select
-            v-model="prefs.number_questions"
+            @change="prefs.number_questions"
             variant="outlined"
             hide-details
             label="Nombre de questions"
-            :items="[4]"
+            :items="[10]"
           ></v-select
         ></v-col>
       </v-row>

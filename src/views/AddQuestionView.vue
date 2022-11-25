@@ -145,7 +145,7 @@ const success = ref(false);
               :rules="rules"
               :items="themes"
               density="compact"
-              label="Thème"
+              label="Thème : choisissez ou créez-en un"
               variant="outlined"
               v-model="question.theme"
             >

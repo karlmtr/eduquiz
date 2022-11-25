@@ -61,7 +61,7 @@ const openQuestion = (ID: string) => {
         </v-col>
       </v-row>
 
-      <v-dialog v-model="loading" hide-overlay persistent>
+      <v-dialog v-model="loading" width="auto" hide-overlay persistent>
         <v-progress-circular
           indeterminate
           color="info"

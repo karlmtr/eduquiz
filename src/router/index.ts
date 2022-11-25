@@ -8,6 +8,15 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: "/about",
+      name: "about",
+      component: () => import("../views/aboutView.vue"),
+      meta: {
+        requiresTeacher: false,
+        requiresAuth: false,
+      },
+    },
+    {
       path: "/",
       name: "home",
       component: HomeView,
@@ -111,7 +120,7 @@ router.beforeEach(async (to) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const userInfo: any = await user();
   if (requiresAuth && !userInfo) {
-    return { name: "signUp" };
+    return { name: "about" };
   } else if ((to.name === "signUp" || to.name === "finishSignIn") && userInfo) {
     return { name: "home" };
   } else if (requiresTeacher && !isTeacher(userInfo.email)) {

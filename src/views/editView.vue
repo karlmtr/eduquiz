@@ -214,7 +214,7 @@ const loading = ref(false);
             : "Erreur, veuillez vérifier votre connexion"
         }}
       </v-snackbar>
-      <v-dialog v-model="loading" hide-overlay persistent>
+      <v-dialog v-model="loading" width="auto" hide-overlay persistent>
         <v-progress-circular
           indeterminate
           color="info"

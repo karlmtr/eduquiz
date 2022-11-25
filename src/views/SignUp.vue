@@ -144,6 +144,7 @@ const emailRules = ref([
   background-size: 100%;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
 }
 
 @media screen and (min-width: 900px) {
